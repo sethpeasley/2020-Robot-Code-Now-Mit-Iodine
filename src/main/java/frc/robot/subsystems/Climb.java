@@ -21,63 +21,70 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.util.PID;
 
-public class Climb extends SubsystemBase {
+public class Climb extends SubsystemBase
+{
+    private final TalonFX climbFx = new TalonFX(Constants.kClimbFXCAN);
+    public final PID climbPID = new PID(Constants.PClimb, Constants.IClimb, Constants.DClimb, Constants.climbEpsilon);
+    //private final NetworkTableEntry ClimbP, Encoderticks, ClimbD, setpointEntry;
 
-  private final TalonFX climbFx = new TalonFX(Constants.kClimbFXCAN);
-  public final PID climbPID = new PID(Constants.PClimb, Constants.IClimb, Constants.DClimb, Constants.climbEpsilon);
-  //private final NetworkTableEntry ClimbP, Encoderticks, ClimbD, setpointEntry;
-  
 
-  public Climb() {
+    public Climb()
+    {
+        // Zeros Encoder Reading
+        zeroSensors();
+        climbFx.configFactoryDefault();
+        climbPID.setMaxOutput(Constants.kClimbMaxOutput);
+        //Sets Climb PID output as full output
+        /*climbPID.setMaxOutput(Constants.kClimbMaxOutput);
 
-    // Zeros Encoder Reading
-    zeroSensors();
-    climbFx.configFactoryDefault();
-    climbPID.setMaxOutput(Constants.kClimbMaxOutput);
-    //Sets Climb PID output as full output
-    /*climbPID.setMaxOutput(Constants.kClimbMaxOutput);
+        // Setting shuffleboard PID tuner
+        ClimbP = Shuffleboard.getTab("Climb").add("Proportional", 0).withWidget(BuiltInWidgets.kTextView).getEntry();
+        ClimbD = Shuffleboard.getTab("Climb").add("Deritive", 0).withWidget(BuiltInWidgets.kTextView).getEntry();
 
-    // Setting shuffleboard PID tuner
-    ClimbP = Shuffleboard.getTab("Climb").add("Proportional", 0).withWidget(BuiltInWidgets.kTextView).getEntry();
-    ClimbD = Shuffleboard.getTab("Climb").add("Deritive", 0).withWidget(BuiltInWidgets.kTextView).getEntry();
+        // Encoder Ticks and Setpoint for Pid loop
+        Encoderticks = Shuffleboard.getTab("Climb").add("Encoder ticks", 0).withWidget(BuiltInWidgets.kTextView).getEntry();
+        setpointEntry = Shuffleboard.getTab("Climb").add("Setpoint", 0).withWidget(BuiltInWidgets.kTextView).getEntry();   */
 
-    // Encoder Ticks and Setpoint for Pid loop
-    Encoderticks = Shuffleboard.getTab("Climb").add("Encoder ticks", 0).withWidget(BuiltInWidgets.kTextView).getEntry();
-    setpointEntry = Shuffleboard.getTab("Climb").add("Setpoint", 0).withWidget(BuiltInWidgets.kTextView).getEntry();   */ 
-    
-  }
+    }
 
-  //Get's Climbs TallonFX Encoder Pos
-  public double getClimbDistance() {
-		return climbFx.getSelectedSensorPosition();
-  }
-  
-  // Zeros ClimbFX encoder Pos
-  public void zeroSensors() {
-    climbFx.setSelectedSensorPosition(0);
-  }
-  
-  // Sets ClimbFx speed for Climb
-  public void setPower(double power) {
-    climbFx.set(ControlMode.PercentOutput, power);
-  }
+    //Get's Climbs TallonFX Encoder Pos
+    public double getClimbDistance()
+    {
+            return climbFx.getSelectedSensorPosition();
+    }
 
-  // Sets ClimbFx SetPos 
-  public void setClimbSetpoint(double setpoint) {
-    climbPID.setDesiredValue(setpoint);
-  }
+    // Zeros ClimbFX encoder Pos
+    public void zeroSensors()
+    {
+        climbFx.setSelectedSensorPosition(0);
+    }
 
-  // Reads if Pid is finished 
-  public boolean isPidFinished() {
-      return climbPID.isDone();
-  }
+    // Sets ClimbFx speed for Climb
+    public void setPower(double power)
+    {
+        climbFx.set(ControlMode.PercentOutput, power);
+    }
 
-  // Calcs Pid for Climb
-  public void climbPidCalc(double power){
-    power = climbPID.calcPID(getClimbDistance());
-  }
+    // Sets ClimbFx SetPos
+    public void setClimbSetpoint(double setpoint)
+    {
+        climbPID.setDesiredValue(setpoint);
+    }
 
-  @Override
-  public void periodic() {
-  }
+    // Reads if Pid is finished
+    public boolean isPidFinished()
+    {
+        return climbPID.isDone();
+    }
+
+    // Calcs Pid for Climb
+    public void climbPidCalc(double power)
+    {
+        power = climbPID.calcPID(getClimbDistance());
+    }
+
+    @Override
+    public void periodic()
+    {
+    }
 }

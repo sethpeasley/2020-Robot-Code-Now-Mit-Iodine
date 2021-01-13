@@ -14,64 +14,68 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.util.PID;
 
-public class Intake extends SubsystemBase {
+public class Intake extends SubsystemBase
+{
+    private final VictorSPX m_intakeFlip = new VictorSPX(Constants.kFlipMotorCAN);
+    private final VictorSPX m_intakeMotor = new VictorSPX(Constants.kIntakeMotorCAN);
+
+    private final DigitalInput m_absoluteEncoder = new DigitalInput(Constants.kIntakeAbsoluteInput);
+    private final PID intakePID = new PID(Constants.PIntake, Constants.IIntake, Constants.DIntake,
+        Constants.intakeEpsilon);
+
+    public Intake()
+    {
+        intakePID.setMaxOutput(1.0);
+        // m_intakeEncoder.setDistancePerPulse(m_intakeEncoder.getDistancePerPulse());
+        // m_absoluteEncoder.get
+    }
+
+    public void setFlipPower(double power)
+    {
+        m_intakeFlip.set(ControlMode.PercentOutput, power);
+        // Sets the power of the motor that flips out the intake
+    }
+
+    public void setIntakePower(final double power)
+    {
+        m_intakeMotor.set(ControlMode.PercentOutput, power);
+        // Sets the power of the motor that turns the belts for the intake
+    }
 
 
-  private final VictorSPX m_intakeFlip = new VictorSPX(Constants.kFlipMotorCAN);
-  private final VictorSPX m_intakeMotor = new VictorSPX(Constants.kIntakeMotorCAN);
+    public boolean isIntakeActive()
+    {
+        return true;
+    }
 
-  private final DigitalInput m_absoluteEncoder = new DigitalInput(Constants.kIntakeAbsoluteInput);
-  private final PID intakePID = new PID(Constants.PIntake, Constants.IIntake, Constants.DIntake,
-      Constants.intakeEpsilon);
+    public double getEncoderDistance()
+    {
+        return 1;
+        // To track how many rotations of the motor of intake
+    }
 
-  public Intake() {
-    intakePID.setMaxOutput(1.0);
-    // m_intakeEncoder.setDistancePerPulse(m_intakeEncoder.getDistancePerPulse());
-    // m_absoluteEncoder.get
-  }
+    public void zeroIntakeEncoders()
+    {
+        // Resets intake encoders
+    }
 
+    public void setpointPID(final double setpoint)
+    {
+        intakePID.setDesiredValue(setpoint);
+    }
 
+    public double intakeCalcPID()
+    {
+        return intakePID.calcPID(getEncoderDistance());
+    }
 
-  public void setFlipPower(double power) {
-    m_intakeFlip.set(ControlMode.PercentOutput, power);
-    // Sets the power of the motor that flips out the intake
-  }
+    public boolean pidIsFinished()
+    {
+        return intakePID.isDone();
+    }
 
-  public void setIntakePower(final double power) {
-    m_intakeMotor.set(ControlMode.PercentOutput, power);
-    // Sets the power of the motor that turns the belts for the intake
-  }
-
-
-  public boolean isIntakeActive() {
-    return true;
-  }
-
-  public double getEncoderDistance() {
-    return 1;
-    // To track how many rotations of the motor of intake
-  }
-
-  public void zeroIntakeEncoders() {
-   
-    
-    // Resets intake encoders
-  }
-
-  public void setpointPID(final double setpoint) {
-    intakePID.setDesiredValue(setpoint);
-  }
-
-  public double intakeCalcPID() {
-    return intakePID.calcPID(getEncoderDistance());
-  }
-
-  public boolean pidIsFinished() {
-    return intakePID.isDone();
-  }
-
- @Override
-  public void periodic() {
-   
-  }
+    @Override
+    public void periodic()
+    {
+    }
 }

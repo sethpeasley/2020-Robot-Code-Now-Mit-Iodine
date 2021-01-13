@@ -24,201 +24,231 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.util.PID;
 
-public class Turret extends SubsystemBase {
-  
-  public boolean testpid = false;
+public class Turret extends SubsystemBase
+{
+    public boolean testpid = false;
 
-  public double seesTarget = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getDouble(0);
-  public double measuredX, tlong, thor, skewOffsetDegrees, actualXx;
-  public final double pixelsToDegrees = .1419047619;
+    public double seesTarget = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getDouble(0);
+    public double measuredX, tlong, thor, skewOffsetDegrees, actualXx;
+    public final double pixelsToDegrees = .1419047619;
 
-  private NetworkTableEntry shuffleDistance;
-  private NetworkTableEntry abs, quad, kp, ki, kd, kff, period, pos, setPoint, height;
+    private NetworkTableEntry shuffleDistance;
+    private NetworkTableEntry abs, quad, kp, ki, kd, kff, period, pos, setPoint, height;
 
-  private PID turretPID = new PID(Constants.PShooter, Constants.IShooter, Constants.DShooter, Constants.shooterEpsilon);
+    private PID turretPID = new PID(Constants.PShooter, Constants.IShooter, Constants.DShooter, Constants.shooterEpsilon);
 
-  private CANSparkMax shooterA = new CANSparkMax(Constants.kShooterACAN, MotorType.kBrushless);
-  private CANSparkMax shooterB = new CANSparkMax(Constants.kShooterBCAN, MotorType.kBrushless);
-  public WPI_TalonSRX turnTurret = new WPI_TalonSRX(Constants.kTurnTurretCAN);
+    private CANSparkMax shooterA = new CANSparkMax(Constants.kShooterACAN, MotorType.kBrushless);
+    private CANSparkMax shooterB = new CANSparkMax(Constants.kShooterBCAN, MotorType.kBrushless);
+    public WPI_TalonSRX turnTurret = new WPI_TalonSRX(Constants.kTurnTurretCAN);
 
 
-  /**
-   * -Use computer vision to determine heading angle and distance from upper
-   * target using relative size of a contour -Get encoder value to determine speed
-   * of flywheel -Get encoder value to determine angle of turret -Set power of
-   * flywheel motor -Set power of turret angle motor
-   * 
-   */
+    /**
+     * -Use computer vision to determine heading angle and distance from upper
+     * target using relative size of a contour -Get encoder value to determine speed
+     * of flywheel -Get encoder value to determine angle of turret -Set power of
+     * flywheel motor -Set power of turret angle motor
+     *
+     */
+    public Turret()
+    {
+        configMotorDrivers();
 
-  public Turret() {
-    configMotorDrivers();
-    
-    turretPID.setMaxOutput(Constants.shooterMaxOutput);
-    
-    ledOff();
-    /*shuffleDistance = Shuffleboard.getTab("Vision").add("Actual heading", getHeadingToTarget())
-        .withWidget(BuiltInWidgets.kTextView).getEntry();
-    kp = Shuffleboard.getTab("PID").add("proportional gain", 0).withWidget(BuiltInWidgets.kTextView).withSize(2, 2)
-        .getEntry();
-    ki = Shuffleboard.getTab("PID").add("integral gain", 0).withWidget(BuiltInWidgets.kTextView).withSize(2, 2)
-        .getEntry();
-    kd = Shuffleboard.getTab("PID").add("derivative gain", 0).withWidget(BuiltInWidgets.kTextView).withSize(2, 2)
-        .getEntry();
-    kff = Shuffleboard.getTab("PID").add("feed forward", 0).withWidget(BuiltInWidgets.kTextView).withSize(2, 2)
-        .getEntry();
-    setPoint = Shuffleboard.getTab("PID").add("Setpoint", 0).withWidget(BuiltInWidgets.kTextView).withSize(2, 2)
-        .getEntry();
+        turretPID.setMaxOutput(Constants.shooterMaxOutput);
 
-    pos = Shuffleboard.getTab("PID").add("Velocity", 0).withWidget(BuiltInWidgets.kTextView).withSize(2, 2).getEntry();
+        ledOff();
+        /*shuffleDistance = Shuffleboard.getTab("Vision").add("Actual heading", getHeadingToTarget())
+            .withWidget(BuiltInWidgets.kTextView).getEntry();
+        kp = Shuffleboard.getTab("PID").add("proportional gain", 0).withWidget(BuiltInWidgets.kTextView).withSize(2, 2)
+            .getEntry();
+        ki = Shuffleboard.getTab("PID").add("integral gain", 0).withWidget(BuiltInWidgets.kTextView).withSize(2, 2)
+            .getEntry();
+        kd = Shuffleboard.getTab("PID").add("derivative gain", 0).withWidget(BuiltInWidgets.kTextView).withSize(2, 2)
+            .getEntry();
+        kff = Shuffleboard.getTab("PID").add("feed forward", 0).withWidget(BuiltInWidgets.kTextView).withSize(2, 2)
+            .getEntry();
+        setPoint = Shuffleboard.getTab("PID").add("Setpoint", 0).withWidget(BuiltInWidgets.kTextView).withSize(2, 2)
+            .getEntry();
 
-     abs = Shuffleboard.getTab("turret").add("Absolute",0).withPosition(1,
-     0).withSize(2,1).withWidget(BuiltInWidgets.kTextView).getEntry();
-     quad = Shuffleboard.getTab("turret").add("qude",0).withPosition(1,
-     2).withSize(2,1).withWidget(BuiltInWidgets.kTextView).getEntry();
+        pos = Shuffleboard.getTab("PID").add("Velocity", 0).withWidget(BuiltInWidgets.kTextView).withSize(2, 2).getEntry();
 
-    period = Shuffleboard.getTab("PID").add("Period", 0).withWidget(BuiltInWidgets.kTextView).withSize(2, 2).getEntry();
+        abs = Shuffleboard.getTab("turret").add("Absolute",0).withPosition(1,
+        0).withSize(2,1).withWidget(BuiltInWidgets.kTextView).getEntry();
+        quad = Shuffleboard.getTab("turret").add("qude",0).withPosition(1,
+        2).withSize(2,1).withWidget(BuiltInWidgets.kTextView).getEntry();
 
-    height = Shuffleboard.getTab("PID").add("Height", 0).withWidget(BuiltInWidgets.kTextView).withSize(2, 2).getEntry();
+        period = Shuffleboard.getTab("PID").add("Period", 0).withWidget(BuiltInWidgets.kTextView).withSize(2, 2).getEntry();
 
-    resetTurnEncoder();*/
-  }
+        height = Shuffleboard.getTab("PID").add("Height", 0).withWidget(BuiltInWidgets.kTextView).withSize(2, 2).getEntry();
 
-  public void configMotorDrivers(){
-    shooterA.restoreFactoryDefaults();
-    shooterB.restoreFactoryDefaults();
-    turnTurret.configFactoryDefault();
-
-    shooterA.setClosedLoopRampRate(Constants.rpmRampTime);
-    shooterB.setClosedLoopRampRate(Constants.rpmRampTime);
-    shooterB.follow(shooterA, true);
-    shooterA.getPIDController().setP(Constants.Prpm);
-    shooterA.getPIDController().setI(Constants.Irpm);
-    shooterA.getPIDController().setD(Constants.Drpm);
-    shooterA.getPIDController().setFF(Constants.rpmFF);
-    shooterA.getPIDController().setOutputRange(Constants.rpmMinOutput, Constants.rpmMaxOutput);
-    shooterA.setIdleMode(IdleMode.kCoast);
-    shooterB.setIdleMode(IdleMode.kCoast);
-
-    turnTurret.configClosedloopRamp(Constants.shooterRampTime);
-    turnTurret.configOpenloopRamp(Constants.shooterRampTime);
-    turnTurret.setNeutralMode(NeutralMode.Brake);
-  }
-
-  @Override
-  public void periodic() {
-
-    // This method will be called once per scheduler run
-    // shuffleDistance.setDouble(getHeadingToTarget());
-    //pos.setDouble(shooterA.getEncoder().getVelocity());
-    
-     /* shooterA.getPIDController().setP(kp.getDouble(0));
-      shooterA.getPIDController().setI(ki.getDouble(0));
-      shooterA.getPIDController().setD(kd.getDouble(0));
-      shooterA.getPIDController().setFF(kff.getDouble(0));*/
-     // shooterA.setControlFramePeriodMs((int)period.getDouble(0));
-     
-    //height.setDouble(getHeight());
-    // System.out.println((int)period.getDouble(0));
-    // abs.setDouble(getAbsoluteEncoderValue());
-    // quad.setDouble(getTurnEncoderValue());
-     //shooterA.getPIDController().setReference(setPoint.getDouble(0), ControlType.kVelocity);
-  }
-
-  public boolean seesTarget() {
-    double seesTarget = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getDouble(0);
-    if (seesTarget == 1.0) {
-      return true;
-    } else {
-      return false;
+        resetTurnEncoder();*/
     }
-  }
 
-  public double getHeadingToTarget() {
-    double seesTarget = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getDouble(0);
-    if (seesTarget == 1.0) {
-      return NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0)
-          + NetworkTableInstance.getDefault().getTable("limelight").getEntry("ts").getDouble(0);
-    } else {
-      return 0.0;
+    public void configMotorDrivers()
+    {
+        shooterA.restoreFactoryDefaults();
+        shooterB.restoreFactoryDefaults();
+        turnTurret.configFactoryDefault();
+
+        shooterA.setClosedLoopRampRate(Constants.rpmRampTime);
+        shooterB.setClosedLoopRampRate(Constants.rpmRampTime);
+        shooterB.follow(shooterA, true);
+        shooterA.getPIDController().setP(Constants.Prpm);
+        shooterA.getPIDController().setI(Constants.Irpm);
+        shooterA.getPIDController().setD(Constants.Drpm);
+        shooterA.getPIDController().setFF(Constants.rpmFF);
+        shooterA.getPIDController().setOutputRange(Constants.rpmMinOutput, Constants.rpmMaxOutput);
+        shooterA.setIdleMode(IdleMode.kCoast);
+        shooterB.setIdleMode(IdleMode.kCoast);
+
+        turnTurret.configClosedloopRamp(Constants.shooterRampTime);
+        turnTurret.configOpenloopRamp(Constants.shooterRampTime);
+        turnTurret.setNeutralMode(NeutralMode.Brake);
     }
-  }
 
-  public double getSkew() {
-    return NetworkTableInstance.getDefault().getTable("limelight").getEntry("ts").getDouble(0);
-  }
+    @Override
+    public void periodic()
+    {
+        // This method will be called once per scheduler run
+        // shuffleDistance.setDouble(getHeadingToTarget());
+        //pos.setDouble(shooterA.getEncoder().getVelocity());
 
-  public double getHeight() {
-    return NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0);
-  }
+        /* shooterA.getPIDController().setP(kp.getDouble(0));
+        shooterA.getPIDController().setI(ki.getDouble(0));
+        shooterA.getPIDController().setD(kd.getDouble(0));
+        shooterA.getPIDController().setFF(kff.getDouble(0));*/
+        // shooterA.setControlFramePeriodMs((int)period.getDouble(0));
 
-  public double getX() {
-    return NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0);
-  }
+        //height.setDouble(getHeight());
+        // System.out.println((int)period.getDouble(0));
+        // abs.setDouble(getAbsoluteEncoderValue());
+        // quad.setDouble(getTurnEncoderValue());
+        //shooterA.getPIDController().setReference(setPoint.getDouble(0), ControlType.kVelocity);
+    }
 
-  public double getY() {
-    return NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0);
-  }
+    public boolean seesTarget()
+    {
+        double seesTarget = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getDouble(0);
+        if (seesTarget == 1.0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 
-  public void setShooterSpeed(double speed) {
-    shooterA.set(speed);
-  }
+    public double getHeadingToTarget()
+    {
+        double seesTarget = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getDouble(0);
+        if (seesTarget == 1.0)
+        {
+            return NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0)
+                + NetworkTableInstance.getDefault().getTable("limelight").getEntry("ts").getDouble(0);
+        }
+        else
+        {
+            return 0.0;
+        }
+    }
 
-  public void stopShooter() {
-    shooterA.set(0);
-  }
-  public double getShooterAverageRPM() {
-    return shooterA.getEncoder().getVelocity() + shooterB.getEncoder().getVelocity()/2;
-  }
+    public double getSkew()
+    {
+        return NetworkTableInstance.getDefault().getTable("limelight").getEntry("ts").getDouble(0);
+    }
 
-  public void setShooterRPM(int rpm) {
-    shooterA.getPIDController().setReference(rpm, ControlType.kVelocity);
-  }
-  
-  public void setTurnSpeed(double speed) {
-    turnTurret.set(ControlMode.PercentOutput, speed);
-  }
+    public double getHeight()
+    {
+        return NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0);
+    }
 
-  public void stopTurn() {
-    turnTurret.set(ControlMode.PercentOutput, 0);
-  }
+    public double getX()
+    {
+        return NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0);
+    }
 
-  public void turretSetpoint(double setpoint) {
-    turretPID.setDesiredValue(setpoint);
-  }
+    public double getY()
+    {
+        return NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0);
+    }
 
-  public double turretCalcPID() {
-    return turretPID.calcPID(getHeadingToTarget());
-  }
+    public void setShooterSpeed(double speed)
+    {
+        shooterA.set(speed);
+    }
 
-  public double getTurnEncoderValue() {
-    return turnTurret.getSelectedSensorPosition();
-  }
+    public void stopShooter()
+    {
+        shooterA.set(0);
+    }
 
-  public int getAbsoluteEncoderValue() {
-    return turnTurret.getSensorCollection().getPulseWidthPosition();
-  }
+    public double getShooterAverageRPM()
+    {
+        return shooterA.getEncoder().getVelocity() + shooterB.getEncoder().getVelocity()/2;
+    }
 
-  public void resetTurnEncoder() {
-    turnTurret.setSelectedSensorPosition(getAbsoluteEncoderValue());
-  }
+    public void setShooterRPM(int rpm)
+    {
+        shooterA.getPIDController().setReference(rpm, ControlType.kVelocity);
+    }
 
-  public Boolean isTurretActive(){
-    return turnTurret.isAlive() ;
-  }
+    public void setTurnSpeed(double speed)
+    {
+        turnTurret.set(ControlMode.PercentOutput, speed);
+    }
 
-  public PID getTurnPID() {
-    return turretPID;
-  }
+    public void stopTurn()
+    {
+        turnTurret.set(ControlMode.PercentOutput, 0);
+    }
 
-  public double getRPM() {
-    return shooterA.getEncoder().getVelocity();
-  }
+    public void turretSetpoint(double setpoint)
+    {
+        turretPID.setDesiredValue(setpoint);
+    }
 
-  public void ledOn() {
-    NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(3);
-  }
+    public double turretCalcPID()
+    {
+        return turretPID.calcPID(getHeadingToTarget());
+    }
 
-  public void ledOff() {
-    NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(1);
-  }
+    public double getTurnEncoderValue()
+    {
+        return turnTurret.getSelectedSensorPosition();
+    }
+
+    public int getAbsoluteEncoderValue()
+    {
+        return turnTurret.getSensorCollection().getPulseWidthPosition();
+    }
+
+    public void resetTurnEncoder()
+    {
+        turnTurret.setSelectedSensorPosition(getAbsoluteEncoderValue());
+    }
+
+    public Boolean isTurretActive()
+    {
+        return turnTurret.isAlive() ;
+    }
+
+    public PID getTurnPID()
+    {
+        return turretPID;
+    }
+
+    public double getRPM()
+    {
+        return shooterA.getEncoder().getVelocity();
+    }
+
+    public void ledOn()
+    {
+        NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(3);
+    }
+
+    public void ledOff()
+    {
+        NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(1);
+    }
 }

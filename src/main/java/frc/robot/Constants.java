@@ -22,9 +22,8 @@ import edu.wpi.first.wpilibj.util.Color;
  * It is advised to statically import this class (or one of its inner classes)
  * wherever the constants are needed, to reduce verbosity.
  */
-public final class Constants {
-  
-
+public final class Constants
+{
     // DriveTrain CAN ids
     public static int rightDriveACAN = 10;
     public static int leftDriveACAN = 11;
@@ -80,7 +79,7 @@ public final class Constants {
     public static int kBackupTOFCAN = 3; // not used unless one breaks
     public static int kIndexMotorCAN = 3; // temporary CAN ID
 
-  
+
     // Indexer Doubles in Millimeters
     public static double kCellIncomingValueLow = 30.0; // 30 mm
     public static double kCellIncomingValueHigh = 90.0; // 110 mm
@@ -141,11 +140,11 @@ public final class Constants {
     public static Color kGreenTarget = ColorMatch.makeColor(0.197, 0.561, 0.240);
     public static Color kRedTarget = ColorMatch.makeColor(0.561, 0.232, 0.114);
     public static Color kYellowTarget = ColorMatch.makeColor(0.361, 0.524, 0.113);
-    
+
     // Driver Controller Bindings
 
-    // Driver Controller port 
-    public static int kDriverPort = 0; 
+    // Driver Controller port
+    public static int kDriverPort = 0;
     public static int kOperatorPort = 1;
 
     // Driver Controller Axis's
@@ -158,11 +157,11 @@ public final class Constants {
     public static int kRightStickX = 4;
     public static int kRightStickY = 5;
 
-    // Triggers 
+    // Triggers
     public static int kRightTrigger = 3;
     public static int kLeftTrigger = 2;
 
-    // Buttons Bindings    
+    // Buttons Bindings
     public static int kA = 1;
     public static int kB = 2;
     public static int kX = 3;
@@ -176,8 +175,4 @@ public final class Constants {
 
     public static int kLeftStickPress = 9;
     public static int kRightStickPress = 10;
-
-    
-
-
 }
