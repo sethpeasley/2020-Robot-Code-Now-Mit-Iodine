@@ -20,7 +20,7 @@ public class ControlPanel extends SubsystemBase
 
     private final ColorSensorV3 m_colorSensor = new ColorSensorV3(Port.kOnboard);
 
-    private final Victor m_CpMotor = new Victor(Constants.kCPMotorPort);
+    private final Victor m_CpMotor = new Victor(Constants.k_CPMotorPort);
 
     private int targetCounter, colorCounter;
 
@@ -59,10 +59,10 @@ public class ControlPanel extends SubsystemBase
     //  Functions Runs Once every Command run
     public ControlPanel()
     {
-        m_colorMatcher.addColorMatch(Constants.kBlueTarget);
-        m_colorMatcher.addColorMatch(Constants.kGreenTarget);
-        m_colorMatcher.addColorMatch(Constants.kRedTarget);
-        m_colorMatcher.addColorMatch(Constants.kYellowTarget);
+        m_colorMatcher.addColorMatch(Constants.k_BlueTarget);
+        m_colorMatcher.addColorMatch(Constants.k_GreenTarget);
+        m_colorMatcher.addColorMatch(Constants.k_RedTarget);
+        m_colorMatcher.addColorMatch(Constants.k_YellowTarget);
         currentState = ControlPanelState.INIT;
         setControlPanelState(ControlPanelState.INIT);
     }
@@ -104,26 +104,26 @@ public class ControlPanel extends SubsystemBase
         ColorMatchResult match = m_colorMatcher.matchClosestColor(detectedColor);
 
         // Checks if The FMS Color = blue on te Robot Color sensor
-        if (match.color == Constants.kBlueTarget)
+        if (match.color == Constants.k_BlueTarget)
         {
             return ColorState.BLUE;
         }
 
         // Checks if The FMS Color = RED on te Robot Color sensor
-        else if (match.color == Constants.kRedTarget)
+        else if (match.color == Constants.k_RedTarget)
         {
             return ColorState.RED;
         }
 
         // Checks if The FMS Color = Green on te Robot Color sensor
-        else if (match.color == Constants.kGreenTarget)
+        else if (match.color == Constants.k_GreenTarget)
         {
             return ColorState.GREEN;
 
         }
 
         // Checks if The FMS Color = Yellow on te Robot Color sensor
-        else if (match.color == Constants.kYellowTarget)
+        else if (match.color == Constants.k_YellowTarget)
         {
             return ColorState.YELLOW;
         }
@@ -181,7 +181,7 @@ public class ControlPanel extends SubsystemBase
                 if(currentColor != ColorState.NONE)
                 {
                     targetColor = getCurrentCPColor();
-                    runControlPanel(Constants.kControlPanelSpeed);
+                    runControlPanel(Constants.k_ControlPanelSpeed);
                     setControlPanelState(ControlPanelState.ROTATION_CONTROL);
                 }
                 else
@@ -191,7 +191,7 @@ public class ControlPanel extends SubsystemBase
                 }
             break;
             case ROTATION_CONTROL:
-                runControlPanel(Constants.kControlPanelSpeed);
+                runControlPanel(Constants.k_ControlPanelSpeed);
                 currentState = ControlPanelState.ROTATION_CONTROL;
             break;
             case SEES_TARGET_COLOR_ROTATION:
@@ -214,7 +214,7 @@ public class ControlPanel extends SubsystemBase
                 }
             break;
             case POSITION_CONTROL:
-                runControlPanel(Constants.kControlPanelSpeed);
+                runControlPanel(Constants.k_ControlPanelSpeed);
                 currentState = ControlPanelState.POSITION_CONTROL;
             break;
             case SEES_TARGET_COLOR_POSITION:
@@ -250,7 +250,7 @@ public class ControlPanel extends SubsystemBase
             colorCounter = 0;
             lastColor = observedColor;
         }
-        if(currentColor == targetColor && currentState == ControlPanelState.ROTATION_CONTROL && targetCounter < Constants.kMaxCPTicks)
+        if(currentColor == targetColor && currentState == ControlPanelState.ROTATION_CONTROL && targetCounter < Constants.k_MaxCPTicks)
         {
             setControlPanelState(ControlPanelState.SEES_TARGET_COLOR_ROTATION);
         }
@@ -258,7 +258,7 @@ public class ControlPanel extends SubsystemBase
         {
             setControlPanelState(ControlPanelState.TARGET_COLOR_LEFT_VIEW);
         }
-        if(currentColor == targetColor && currentState == ControlPanelState.ROTATION_CONTROL && targetCounter >= Constants.kMaxCPTicks)
+        if(currentColor == targetColor && currentState == ControlPanelState.ROTATION_CONTROL && targetCounter >= Constants.k_MaxCPTicks)
         {
             setControlPanelState(ControlPanelState.HOLD);
         }

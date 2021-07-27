@@ -99,7 +99,7 @@ public class Autotestpath extends CommandBase
                 if(!controller.onTarget())
                 {
                     controller.update();
-                    m_intake.setIntakePower(Constants.kIntakeSpeed);
+                    m_intake.setIntakePower(Constants.k_IntakeSpeed);
                 }
                 else
                 {

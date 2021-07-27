@@ -35,11 +35,11 @@ public class Turret extends SubsystemBase
     private NetworkTableEntry shuffleDistance;
     private NetworkTableEntry abs, quad, kp, ki, kd, kff, period, pos, setPoint, height;
 
-    private PID turretPID = new PID(Constants.PShooter, Constants.IShooter, Constants.DShooter, Constants.shooterEpsilon);
+    private PID turretPID = new PID(Constants.k_PShooter, Constants.k_IShooter, Constants.k_DShooter, Constants.k_shooterEpsilon);
 
-    private CANSparkMax shooterA = new CANSparkMax(Constants.kShooterACAN, MotorType.kBrushless);
-    private CANSparkMax shooterB = new CANSparkMax(Constants.kShooterBCAN, MotorType.kBrushless);
-    public WPI_TalonSRX turnTurret = new WPI_TalonSRX(Constants.kTurnTurretCAN);
+    private CANSparkMax shooterA = new CANSparkMax(Constants.k_ShooterACAN, MotorType.kBrushless);
+    private CANSparkMax shooterB = new CANSparkMax(Constants.k_ShooterBCAN, MotorType.kBrushless);
+    public WPI_TalonSRX turnTurret = new WPI_TalonSRX(Constants.k_TurnTurretCAN);
 
 
     /**
@@ -53,7 +53,7 @@ public class Turret extends SubsystemBase
     {
         configMotorDrivers();
 
-        turretPID.setMaxOutput(Constants.shooterMaxOutput);
+        turretPID.setMaxOutput(Constants.k_shooterMaxOutput);
 
         ledOff();
         /*shuffleDistance = Shuffleboard.getTab("Vision").add("Actual heading", getHeadingToTarget())
@@ -89,19 +89,19 @@ public class Turret extends SubsystemBase
         shooterB.restoreFactoryDefaults();
         turnTurret.configFactoryDefault();
 
-        shooterA.setClosedLoopRampRate(Constants.rpmRampTime);
-        shooterB.setClosedLoopRampRate(Constants.rpmRampTime);
+        shooterA.setClosedLoopRampRate(Constants.k_rpmRampTime);
+        shooterB.setClosedLoopRampRate(Constants.k_rpmRampTime);
         shooterB.follow(shooterA, true);
-        shooterA.getPIDController().setP(Constants.Prpm);
-        shooterA.getPIDController().setI(Constants.Irpm);
-        shooterA.getPIDController().setD(Constants.Drpm);
-        shooterA.getPIDController().setFF(Constants.rpmFF);
-        shooterA.getPIDController().setOutputRange(Constants.rpmMinOutput, Constants.rpmMaxOutput);
+        shooterA.getPIDController().setP(Constants.k_Prpm);
+        shooterA.getPIDController().setI(Constants.k_Irpm);
+        shooterA.getPIDController().setD(Constants.k_Drpm);
+        shooterA.getPIDController().setFF(Constants.k_rpmFF);
+        shooterA.getPIDController().setOutputRange(Constants.k_rpmMinOutput, Constants.k_rpmMaxOutput);
         shooterA.setIdleMode(IdleMode.kCoast);
         shooterB.setIdleMode(IdleMode.kCoast);
 
-        turnTurret.configClosedloopRamp(Constants.shooterRampTime);
-        turnTurret.configOpenloopRamp(Constants.shooterRampTime);
+        turnTurret.configClosedloopRamp(Constants.k_shooterRampTime);
+        turnTurret.configOpenloopRamp(Constants.k_shooterRampTime);
         turnTurret.setNeutralMode(NeutralMode.Brake);
     }
 

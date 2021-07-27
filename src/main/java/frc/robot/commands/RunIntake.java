@@ -37,7 +37,7 @@ public class RunIntake extends CommandBase
     @Override
     public void execute()
     {
-        m_intake.setIntakePower(Constants.kIntakeSpeed);
+        m_intake.setIntakePower(Constants.k_IntakeSpeed);
     }
 
     // Called once the command ends or is interrupted.

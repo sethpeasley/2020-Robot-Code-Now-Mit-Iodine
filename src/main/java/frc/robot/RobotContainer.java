@@ -28,8 +28,8 @@ public class RobotContainer
 
     private NetworkTableEntry kp, kd, kv, ka;
 
-    public static Joystick m_driverController = new Joystick(Constants.kDriverPort);
-    public static Joystick m_operatorController = new Joystick(Constants.kOperatorPort);
+    public static Joystick m_driverController = new Joystick(Constants.HIDConstants.k_DriverPort);
+    public static Joystick m_operatorController = new Joystick(Constants.HIDConstants.k_OperatorPort);
 
     public static JoystickButton climberUp, climberDown, intakeIn, intakeOut, intakeFlip, rotationControl, positionControl, shoot, target, indexerOverride, turretOverride, setAutomatic;
     //TODO: Manual indexer, shooter, override toggle
@@ -44,10 +44,10 @@ public class RobotContainer
 
     public RobotContainer()
     {
-        WPI_TalonSRX m_leftFrontDriveMotor = new WPI_TalonSRX(Constants.leftDriveACAN);
-        WPI_TalonSRX m_rightFrontDriveMotor = new WPI_TalonSRX(Constants.rightDriveACAN);
-        WPI_TalonSRX m_leftRearDriveMotor = new WPI_TalonSRX(Constants.leftDriveBCAN);
-        WPI_TalonSRX m_rightRearDriveMotor = new WPI_TalonSRX(Constants.rightDriveBCAN);
+        WPI_TalonSRX m_leftFrontDriveMotor = new WPI_TalonSRX(Constants.CAN_Addresses.leftDriveACAN);
+        WPI_TalonSRX m_rightFrontDriveMotor = new WPI_TalonSRX(Constants.CAN_Addresses.rightDriveACAN);
+        WPI_TalonSRX m_leftRearDriveMotor = new WPI_TalonSRX(Constants.CAN_Addresses.leftDriveBCAN);
+        WPI_TalonSRX m_rightRearDriveMotor = new WPI_TalonSRX(Constants.CAN_Addresses.rightDriveBCAN);
 
         ADXRS450_Gyro m_gyro = new ADXRS450_Gyro();
     
@@ -71,21 +71,21 @@ public class RobotContainer
 
     private void configureButtonBindings()
     {
-        shoot = new JoystickButton(m_driverController, Constants.kA);
-        target = new JoystickButton(m_driverController, Constants.kRB);
-        climberUp = new JoystickButton(m_driverController, Constants.kStart);
-        climberDown = new JoystickButton(m_driverController, Constants.kSelect);
+        shoot = new JoystickButton(m_driverController, Constants.HIDConstants.k_A);
+        target = new JoystickButton(m_driverController, Constants.HIDConstants.k_RB);
+        climberUp = new JoystickButton(m_driverController, Constants.HIDConstants.k_Start);
+        climberDown = new JoystickButton(m_driverController, Constants.HIDConstants.k_Select);
 
-        intakeIn = new JoystickButton(m_operatorController, Constants.kRB);
-        intakeOut = new JoystickButton(m_operatorController, Constants.kLB);
-        intakeFlip = new JoystickButton(m_operatorController, Constants.kA);
+        intakeIn = new JoystickButton(m_operatorController, Constants.HIDConstants.k_RB);
+        intakeOut = new JoystickButton(m_operatorController, Constants.HIDConstants.k_LB);
+        intakeFlip = new JoystickButton(m_operatorController, Constants.HIDConstants.k_A);
 
-        rotationControl = new JoystickButton(m_operatorController, Constants.kStart);
-        positionControl = new JoystickButton(m_operatorController, Constants.kSelect);
+        rotationControl = new JoystickButton(m_operatorController, Constants.HIDConstants.k_Start);
+        positionControl = new JoystickButton(m_operatorController, Constants.HIDConstants.k_Select);
 
-        indexerOverride = new JoystickButton(m_operatorController, Constants.kLeftStickPress);
-        turretOverride = new JoystickButton(m_operatorController, Constants.kRightStickPress);
-        setAutomatic = new JoystickButton(m_operatorController, Constants.kX);
+        indexerOverride = new JoystickButton(m_operatorController, Constants.HIDConstants.k_LeftStickPress);
+        turretOverride = new JoystickButton(m_operatorController, Constants.HIDConstants.k_RightStickPress);
+        setAutomatic = new JoystickButton(m_operatorController, Constants.HIDConstants.k_X);
 
         shoot.whileHeld(new Shoot(m_turret, m_indexer));
         target.whileHeld(new Target(m_turret));

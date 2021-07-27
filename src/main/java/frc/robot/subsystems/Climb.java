@@ -24,7 +24,7 @@ import frc.robot.util.PID;
 public class Climb extends SubsystemBase
 {
     private final TalonFX climbFx = new TalonFX(Constants.kClimbFXCAN);
-    public final PID climbPID = new PID(Constants.PClimb, Constants.IClimb, Constants.DClimb, Constants.climbEpsilon);
+    public final PID climbPID = new PID(Constants.k_PClimb, Constants.k_IClimb, Constants.k_DClimb, Constants.k_climbEpsilon);
     //private final NetworkTableEntry ClimbP, Encoderticks, ClimbD, setpointEntry;
 
 
@@ -33,7 +33,7 @@ public class Climb extends SubsystemBase
         // Zeros Encoder Reading
         zeroSensors();
         climbFx.configFactoryDefault();
-        climbPID.setMaxOutput(Constants.kClimbMaxOutput);
+        climbPID.setMaxOutput(Constants.k_ClimbMaxOutput);
         //Sets Climb PID output as full output
         /*climbPID.setMaxOutput(Constants.kClimbMaxOutput);
 

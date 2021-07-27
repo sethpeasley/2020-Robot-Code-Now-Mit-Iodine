@@ -25,7 +25,7 @@ public class RaiseIntake extends CommandBase
     @Override
     public void initialize()
     {
-        m_intake.setpointPID(Constants.kIntakeUpPosition);
+        m_intake.setpointPID(Constants.k_IntakeUpPosition);
     }
 
     // Called every time the scheduler runs while the command is scheduled.

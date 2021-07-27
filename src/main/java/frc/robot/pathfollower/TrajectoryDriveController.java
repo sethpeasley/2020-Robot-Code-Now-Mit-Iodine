@@ -29,8 +29,8 @@ public class TrajectoryDriveController
         this.direction = direction;
         //followerLeft.configure(SmartDashboard.getDouble("Kp Turret"), 0, 0, SmartDashboard.getDouble("Ki Turret"), SmartDashboard.getDouble("Kd Turret"));
         //followerRight.configure(SmartDashboard.getDouble("Kp Turret"), 0, 0, SmartDashboard.getDouble("Ki Turret"), SmartDashboard.getDouble("Kd Turret"));
-        followerLeft.configure(Constants.kp, 0, Constants.kd, Constants.kv, Constants.ka);
-        followerRight.configure(Constants.kp, 0, Constants.kd, Constants.kv, Constants.ka);
+        followerLeft.configure(Constants.k_p, 0, Constants.k_d, Constants.k_v, Constants.k_a);
+        followerRight.configure(Constants.k_p, 0, Constants.k_d, Constants.k_v, Constants.k_a);
     }
 
     public boolean onTarget()
@@ -75,8 +75,8 @@ public class TrajectoryDriveController
         }
         else
         {
-            double distanceL = direction * driveBase.leftEncoderDistance()/Constants.kEncoderTicksPerFoot;
-            double distanceR = direction * driveBase.rightEncoderDistance()/Constants.kEncoderTicksPerFoot;
+            double distanceL = direction * driveBase.leftEncoderDistance()/Constants.k_EncoderTicksPerFoot;
+            double distanceR = direction * driveBase.rightEncoderDistance()/Constants.k_EncoderTicksPerFoot;
 
             double speedLeft = direction * followerLeft.calculate(distanceL);
             double speedRight = direction * followerRight.calculate(distanceR);

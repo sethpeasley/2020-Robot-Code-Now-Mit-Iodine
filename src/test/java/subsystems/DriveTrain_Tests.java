@@ -18,8 +18,12 @@ import org.mockito.Mockito.*;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import frc.robot.subsystems.Drivetrain;
 
-
-
+/**
+ * Drivetrain subsystem
+    4 TalonSRX Motor Contollers
+    2 mag encoders
+    1 ADXRS450 Gyroscope
+ */
 public class DriveTrain_Tests 
 {
     private WPI_TalonSRX m_leftFrontDriveMotor; // = new WPI_TalonSRX(Constants.leftDriveACAN);

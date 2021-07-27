@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.robot.Constants;
+import frc.robot.Constants.HIDConstants;
 import frc.robot.RobotContainer;
 
 
@@ -57,8 +58,8 @@ public class Drivetrain extends SubsystemBase
 
         m_gyro = gyro;// = new ADXRS450_Gyro();
 
-        m_turnPID = new PID(Constants.PTurn, Constants.ITurn, Constants.DTurn, Constants.turnEpsilon);
-        m_drivePID = new PID(Constants.PDrive, Constants.IDrive, Constants.DDrive, 1.0);
+        m_turnPID = new PID(Constants.k_PTurn, Constants.k_ITurn, Constants.k_DTurn, Constants.k_turnEpsilon);
+        m_drivePID = new PID(Constants.k_PDrive, Constants.k_IDrive, Constants.k_DDrive, 1.0);
 
         leftDriveGroup = new SpeedControllerGroup(m_leftFrontDriveMotor, m_leftRearDriveMotor);
         rightDriveGroup = new SpeedControllerGroup(m_rightFrontDriveMotor, m_rightRearDriveMotor);
@@ -89,10 +90,10 @@ public class Drivetrain extends SubsystemBase
         m_rightFrontDriveMotor.setInverted(true);
         m_rightRearDriveMotor.setInverted(true);
 
-        m_leftFrontDriveMotor.configOpenloopRamp(Constants.kRampRate);
-        m_leftRearDriveMotor.configOpenloopRamp(Constants.kRampRate);
-        m_rightFrontDriveMotor.configOpenloopRamp(Constants.kRampRate);
-        m_rightRearDriveMotor.configOpenloopRamp(Constants.kRampRate);
+        m_leftFrontDriveMotor.configOpenloopRamp(Constants.DriveTrainContants.k_RampRate);
+        m_leftRearDriveMotor.configOpenloopRamp(Constants.DriveTrainContants.k_RampRate);
+        m_rightFrontDriveMotor.configOpenloopRamp(Constants.DriveTrainContants.k_RampRate);
+        m_rightRearDriveMotor.configOpenloopRamp(Constants.DriveTrainContants.k_RampRate);
 
         m_leftFrontDriveMotor.setNeutralMode(NeutralMode.Brake);
         m_leftRearDriveMotor.setNeutralMode(NeutralMode.Brake);
@@ -100,24 +101,24 @@ public class Drivetrain extends SubsystemBase
         m_rightRearDriveMotor.setNeutralMode(NeutralMode.Brake);
 
         m_leftFrontDriveMotor.enableCurrentLimit(true);
-        m_leftFrontDriveMotor.configContinuousCurrentLimit(Constants.kContinuousCurrentLimit);
-        m_leftFrontDriveMotor.configPeakCurrentDuration(Constants.kPeakCurrentDuration);
-        m_leftFrontDriveMotor.configPeakCurrentLimit(Constants.kPeakCurrentLimit);
+        m_leftFrontDriveMotor.configContinuousCurrentLimit(Constants.DriveTrainContants.k_ContinuousCurrentLimit);
+        m_leftFrontDriveMotor.configPeakCurrentDuration(Constants.DriveTrainContants.k_PeakCurrentDuration);
+        m_leftFrontDriveMotor.configPeakCurrentLimit(Constants.DriveTrainContants.k_PeakCurrentLimit);
 
         m_leftRearDriveMotor.enableCurrentLimit(true);
-        m_leftRearDriveMotor.configContinuousCurrentLimit(Constants.kContinuousCurrentLimit);
-        m_leftRearDriveMotor.configPeakCurrentDuration(Constants.kPeakCurrentDuration);
-        m_leftRearDriveMotor.configPeakCurrentLimit(Constants.kPeakCurrentLimit);
+        m_leftRearDriveMotor.configContinuousCurrentLimit(Constants.DriveTrainContants.k_ContinuousCurrentLimit);
+        m_leftRearDriveMotor.configPeakCurrentDuration(Constants.DriveTrainContants.k_PeakCurrentDuration);
+        m_leftRearDriveMotor.configPeakCurrentLimit(Constants.DriveTrainContants.k_PeakCurrentLimit);
 
         m_rightFrontDriveMotor.enableCurrentLimit(true);
-        m_rightFrontDriveMotor.configContinuousCurrentLimit(Constants.kContinuousCurrentLimit);
-        m_rightFrontDriveMotor.configPeakCurrentDuration(Constants.kPeakCurrentDuration);
-        m_rightFrontDriveMotor.configPeakCurrentLimit(Constants.kPeakCurrentLimit);
+        m_rightFrontDriveMotor.configContinuousCurrentLimit(Constants.DriveTrainContants.k_ContinuousCurrentLimit);
+        m_rightFrontDriveMotor.configPeakCurrentDuration(Constants.DriveTrainContants.k_PeakCurrentDuration);
+        m_rightFrontDriveMotor.configPeakCurrentLimit(Constants.DriveTrainContants.k_PeakCurrentLimit);
 
         m_rightRearDriveMotor.enableCurrentLimit(true);
-        m_rightRearDriveMotor.configContinuousCurrentLimit(Constants.kContinuousCurrentLimit);
-        m_rightRearDriveMotor.configPeakCurrentDuration(Constants.kPeakCurrentDuration);
-        m_rightRearDriveMotor.configPeakCurrentLimit(Constants.kPeakCurrentLimit);
+        m_rightRearDriveMotor.configContinuousCurrentLimit(Constants.DriveTrainContants.k_ContinuousCurrentLimit);
+        m_rightRearDriveMotor.configPeakCurrentDuration(Constants.DriveTrainContants.k_PeakCurrentDuration);
+        m_rightRearDriveMotor.configPeakCurrentLimit(Constants.DriveTrainContants.k_PeakCurrentLimit);
     }
 
     public void autoDriveTrainConfig()
@@ -139,24 +140,24 @@ public class Drivetrain extends SubsystemBase
         m_rightRearDriveMotor.setNeutralMode(NeutralMode.Brake);
 
         m_leftFrontDriveMotor.enableCurrentLimit(true);
-        m_leftFrontDriveMotor.configContinuousCurrentLimit(Constants.kContinuousCurrentLimit);
-        m_leftFrontDriveMotor.configPeakCurrentDuration(Constants.kPeakCurrentDuration);
-        m_leftFrontDriveMotor.configPeakCurrentLimit(Constants.kPeakCurrentLimit);
+        m_leftFrontDriveMotor.configContinuousCurrentLimit(Constants.DriveTrainContants.k_ContinuousCurrentLimit);
+        m_leftFrontDriveMotor.configPeakCurrentDuration(Constants.DriveTrainContants.k_PeakCurrentDuration);
+        m_leftFrontDriveMotor.configPeakCurrentLimit(Constants.DriveTrainContants.k_PeakCurrentLimit);
 
         m_leftRearDriveMotor.enableCurrentLimit(true);
-        m_leftRearDriveMotor.configContinuousCurrentLimit(Constants.kContinuousCurrentLimit);
-        m_leftRearDriveMotor.configPeakCurrentDuration(Constants.kPeakCurrentDuration);
-        m_leftRearDriveMotor.configPeakCurrentLimit(Constants.kPeakCurrentLimit);
+        m_leftRearDriveMotor.configContinuousCurrentLimit(Constants.DriveTrainContants.k_ContinuousCurrentLimit);
+        m_leftRearDriveMotor.configPeakCurrentDuration(Constants.DriveTrainContants.k_PeakCurrentDuration);
+        m_leftRearDriveMotor.configPeakCurrentLimit(Constants.DriveTrainContants.k_PeakCurrentLimit);
 
         m_rightFrontDriveMotor.enableCurrentLimit(true);
-        m_rightFrontDriveMotor.configContinuousCurrentLimit(Constants.kContinuousCurrentLimit);
-        m_rightFrontDriveMotor.configPeakCurrentDuration(Constants.kPeakCurrentDuration);
-        m_rightFrontDriveMotor.configPeakCurrentLimit(Constants.kPeakCurrentLimit);
+        m_rightFrontDriveMotor.configContinuousCurrentLimit(Constants.DriveTrainContants.k_ContinuousCurrentLimit);
+        m_rightFrontDriveMotor.configPeakCurrentDuration(Constants.DriveTrainContants.k_PeakCurrentDuration);
+        m_rightFrontDriveMotor.configPeakCurrentLimit(Constants.DriveTrainContants.k_PeakCurrentLimit);
 
         m_rightRearDriveMotor.enableCurrentLimit(true);
-        m_rightRearDriveMotor.configContinuousCurrentLimit(Constants.kContinuousCurrentLimit);
-        m_rightRearDriveMotor.configPeakCurrentDuration(Constants.kPeakCurrentDuration);
-        m_rightRearDriveMotor.configPeakCurrentLimit(Constants.kPeakCurrentLimit);
+        m_rightRearDriveMotor.configContinuousCurrentLimit(Constants.DriveTrainContants.k_ContinuousCurrentLimit);
+        m_rightRearDriveMotor.configPeakCurrentDuration(Constants.DriveTrainContants.k_PeakCurrentDuration);
+        m_rightRearDriveMotor.configPeakCurrentLimit(Constants.DriveTrainContants.k_PeakCurrentLimit);
 
         m_leftFrontDriveMotor.setSafetyEnabled(false);
         m_leftRearDriveMotor.setSafetyEnabled(false);
@@ -356,7 +357,7 @@ public class Drivetrain extends SubsystemBase
     {
         final double currentAngle = getGyroYaw();
         m_turnPID.setMaxOutput(1.0);
-        m_turnPID.setConstants(Constants.PTurn, Constants.ITurn, Constants.DTurn);
+        m_turnPID.setConstants(Constants.k_PTurn, Constants.k_ITurn, Constants.k_DTurn);
 
         if (!m_turnPID.isDone())
         {
@@ -444,8 +445,8 @@ public class Drivetrain extends SubsystemBase
     {
         double throttle, turn;
         
-        throttle = calculateDeadband(RobotContainer.m_driverController.getRawAxis(Constants.kRightStickX), -0.1, 0.1);
-        turn = calculateDeadband(RobotContainer.m_driverController.getRawAxis(Constants.kLeftStickY), -0.2, 0.2);
+        throttle = calculateDeadband(RobotContainer.m_driverController.getRawAxis(Constants.HIDConstants.k_RightStickX), -0.1, 0.1);
+        turn = calculateDeadband(RobotContainer.m_driverController.getRawAxis(Constants.HIDConstants.k_LeftStickY), -0.2, 0.2);
 
         arcadeDrive(throttle, -turn);
     }

@@ -38,12 +38,12 @@ public class Indexer extends SubsystemBase
     // inits TOF Sensors for Intake and turret
 
     private final Joystick joystick;
-    private final VictorSPX indexerMotor = new VictorSPX(Constants.kIndexMotorCAN);
+    private final VictorSPX indexerMotor = new VictorSPX(Constants.k_IndexMotorCAN);
 
-    private final TimeOfFlight inputTOF = new TimeOfFlight(Constants.kInputTOFCAN);
-    private final TimeOfFlight outputTOF = new TimeOfFlight(Constants.kOutputTOFCAN);
+    private final TimeOfFlight inputTOF = new TimeOfFlight(Constants.k_InputTOFCAN);
+    private final TimeOfFlight outputTOF = new TimeOfFlight(Constants.k_OutputTOFCAN);
 
-    public int cellsContained = Constants.kCellsPreloaded;
+    public int cellsContained = Constants.k_CellsPreloaded;
 
     private IndexerState currentState;
 
@@ -111,12 +111,12 @@ public class Indexer extends SubsystemBase
         switch (state)
         {
             case INIT: // called when subsystem initialzes
-                setShortRangeMode(Constants.kIndexerSamplingPeriod);
-                cellsContained = Constants.kCellsPreloaded;
+                setShortRangeMode(Constants.k_IndexerSamplingPeriod);
+                cellsContained = Constants.k_CellsPreloaded;
                 currentState = IndexerState.INIT;
             break;
             case CELL_IN_INPUT_QUEUE: // called when TOF by intake reads a cell
-                setIndexerMotorPower(Constants.kIndexerStowingMotorPower);
+                setIndexerMotorPower(Constants.k_IndexerStowingMotorPower);
                 currentState = IndexerState.CELL_IN_INPUT_QUEUE;
             break;
             case CELL_LOADED: // called when TOF by intake loses sight of the cell
@@ -130,11 +130,11 @@ public class Indexer extends SubsystemBase
                 currentState = IndexerState.CELL_LOADED;
             break;
             case SHOOTING: // called by turret subsystem
-                setIndexerMotorPower(Constants.kIndexerShootingMotorPower);
+                setIndexerMotorPower(Constants.k_IndexerShootingMotorPower);
                 currentState = IndexerState.SHOOTING;
             break;
             case CELL_IN_OUTPUT_VIEW_SHOOTING: // called by turret subsystem
-                setIndexerMotorPower(Constants.kIndexerShootingMotorPower);
+                setIndexerMotorPower(Constants.k_IndexerShootingMotorPower);
                 currentState = IndexerState.CELL_IN_OUTPUT_VIEW_SHOOTING;
             break;
             case CELL_IN_OUTPUT_VIEW: // called when TOF by turret reads a cell
@@ -149,7 +149,7 @@ public class Indexer extends SubsystemBase
                 currentState = IndexerState.CELL_IN_OUTPUT_VIEW;
             break;
             case SHOOTING_INTERRUPTED: // retreats balls to start of indexer upon cancelling shooting
-                setIndexerMotorPower(-Constants.kIndexerShootingMotorPower);
+                setIndexerMotorPower(-Constants.k_IndexerShootingMotorPower);
                 currentState = IndexerState.SHOOTING_INTERRUPTED;
             break;
             case CELLS_UNLOADED: // called when cell leaves the indexer
@@ -181,12 +181,12 @@ public class Indexer extends SubsystemBase
         {
             inputDistance = getInputDistance();
             outputDistance = getOutputDistance();
-            if (inputDistance <= Constants.kCellIncomingValueHigh && inputDistance >= Constants.kCellIncomingValueLow && currentState != IndexerState.SHOOTING_INTERRUPTED)
+            if (inputDistance <= Constants.k_CellIncomingValueHigh && inputDistance >= Constants.k_CellIncomingValueLow && currentState != IndexerState.SHOOTING_INTERRUPTED)
             {
                 setIndexerState(IndexerState.CELL_IN_INPUT_QUEUE);
             }
 
-            if (inputDistance >= Constants.kCellIncomingValueHigh && currentState == IndexerState.CELL_IN_INPUT_QUEUE)
+            if (inputDistance >= Constants.k_CellIncomingValueHigh && currentState == IndexerState.CELL_IN_INPUT_QUEUE)
             {
                 setIndexerState(IndexerState.CELL_LOADED);
             }
@@ -200,28 +200,28 @@ public class Indexer extends SubsystemBase
                 setIndexerState(IndexerState.FULL);
             }*/
 
-            if (outputDistance <= Constants.kCellOutgoingValueHigh && outputDistance >= Constants.kCellOutgoingValueLow)
+            if (outputDistance <= Constants.k_CellOutgoingValueHigh && outputDistance >= Constants.k_CellOutgoingValueLow)
             {
                 setIndexerState(IndexerState.CELL_IN_OUTPUT_VIEW);
             }
 
-            if (outputDistance <= Constants.kCellOutgoingValueHigh
-                && outputDistance >= Constants.kCellIncomingValueLow && currentState == IndexerState.SHOOTING) {
+            if (outputDistance <= Constants.k_CellOutgoingValueHigh
+                && outputDistance >= Constants.k_CellIncomingValueLow && currentState == IndexerState.SHOOTING) {
                 setIndexerState(IndexerState.CELL_IN_OUTPUT_VIEW_SHOOTING);
             }
 
-            if (outputDistance >= Constants.kCellOutgoingValueHigh
+            if (outputDistance >= Constants.k_CellOutgoingValueHigh
                 && currentState == IndexerState.CELL_IN_OUTPUT_VIEW_SHOOTING)
             {
                 setIndexerState(IndexerState.CELLS_UNLOADED);
             }
 
-            if (outputDistance <= Constants.kCellOutgoingValueHigh && currentState == IndexerState.CELLS_UNLOADED)
+            if (outputDistance <= Constants.k_CellOutgoingValueHigh && currentState == IndexerState.CELLS_UNLOADED)
             {
                 setIndexerState(IndexerState.NOT_FULL);
             }
 
-            if (currentState == IndexerState.SHOOTING_INTERRUPTED && inputDistance <= Constants.kCellIncomingValueHigh
+            if (currentState == IndexerState.SHOOTING_INTERRUPTED && inputDistance <= Constants.k_CellIncomingValueHigh
                 && cellsContained < 5)
             {
                 setIndexerState(IndexerState.NOT_FULL);

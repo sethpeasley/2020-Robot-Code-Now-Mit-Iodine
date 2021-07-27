@@ -16,12 +16,12 @@ import frc.robot.util.PID;
 
 public class Intake extends SubsystemBase
 {
-    private final VictorSPX m_intakeFlip = new VictorSPX(Constants.kFlipMotorCAN);
-    private final VictorSPX m_intakeMotor = new VictorSPX(Constants.kIntakeMotorCAN);
+    private final VictorSPX m_intakeFlip = new VictorSPX(Constants.k_FlipMotorCAN);
+    private final VictorSPX m_intakeMotor = new VictorSPX(Constants.k_IntakeMotorCAN);
 
-    private final DigitalInput m_absoluteEncoder = new DigitalInput(Constants.kIntakeAbsoluteInput);
-    private final PID intakePID = new PID(Constants.PIntake, Constants.IIntake, Constants.DIntake,
-        Constants.intakeEpsilon);
+    private final DigitalInput m_absoluteEncoder = new DigitalInput(Constants.k_IntakeAbsoluteInput);
+    private final PID intakePID = new PID(Constants.k_PIntake, Constants.k_IIntake, Constants.k_DIntake,
+        Constants.k_intakeEpsilon);
 
     public Intake()
     {

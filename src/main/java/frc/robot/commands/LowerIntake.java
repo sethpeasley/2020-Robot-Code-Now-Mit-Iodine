@@ -25,7 +25,7 @@ public class LowerIntake extends CommandBase
     @Override
     public void initialize()
     {
-        m_intake.setpointPID(Constants.kIntakeDownPosition);
+        m_intake.setpointPID(Constants.k_IntakeDownPosition);
     }
 
     // Called every time the scheduler runs while the command is scheduled.
