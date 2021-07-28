@@ -23,7 +23,7 @@ import frc.robot.util.PID;
 
 public class Climb extends SubsystemBase
 {
-    private final TalonFX climbFx = new TalonFX(Constants.kClimbFXCAN);
+    private final TalonFX climbFx = new TalonFX(Constants.CAN_Addresses.kClimbFXCAN);
     public final PID climbPID = new PID(Constants.k_PClimb, Constants.k_IClimb, Constants.k_DClimb, Constants.k_climbEpsilon);
     //private final NetworkTableEntry ClimbP, Encoderticks, ClimbD, setpointEntry;
 

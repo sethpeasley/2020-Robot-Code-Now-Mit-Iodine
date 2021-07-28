@@ -10,6 +10,7 @@ import java.util.function.Supplier;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.Encoder;
@@ -205,11 +206,8 @@ public class Drivetrain extends SubsystemBase
     }
 
     /**
-     * Distance in a Simple return type The output Should Be used in A Distace
-     * Related Method Gets
-     *
-     * @param LeftEncoder
-     *
+     * Get the selected sensor position (in raw sensor units).
+	 * @return Position of selected sensor (in raw sensor units).
      * @author Nicholas Blackburn
      */
     public double leftEncoderDistance()
@@ -218,12 +216,9 @@ public class Drivetrain extends SubsystemBase
     }
 
     /**
-     *
      * Gets Distance in a Simple return type The output Should Be used in A Distace
      * Related Method
-     *
-     * @param RightEncoder
-     *
+     * @return 
      * @author Nicholas Blackburn
      */
     public double rightEncoderDistance()
@@ -452,6 +447,13 @@ public class Drivetrain extends SubsystemBase
     }
 
 
+    /**
+     * Clamps the input 
+     * @param joystickValue
+     * @param deadBandLowLimit
+     * @param deadbandHighLimit
+     * @return
+     */
     public double calculateDeadband(double joystickValue, double deadBandLowLimit, double deadbandHighLimit) 
     {
         if ( (joystickValue > deadbandHighLimit) || (joystickValue < deadBandLowLimit) ) 

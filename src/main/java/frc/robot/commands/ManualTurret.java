@@ -42,7 +42,7 @@ public class ManualTurret extends CommandBase
     @Override
     public void execute()
     {
-        m_turret.setTurnSpeed(m_joystick.getRawAxis(Constants.kRightStickX));
+        m_turret.setTurnSpeed(m_joystick.getRawAxis(Constants.HIDConstants.k_RightStickX));
     }
 
     // Called once the command ends or is interrupted.
